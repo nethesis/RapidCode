@@ -46,14 +46,14 @@ class Rapidcode implements \BMO
 		//Handle form submissions
 		switch ($action) {
 		case 'add':
-			$id = $this->addItem($exampleField,$body);
+			$id = $this->addItem($_REQUEST['label'],$_REQUEST['number'],$_REQUEST['code']);
 			$_REQUEST['id'] = $id;
 			break;
 		case 'edit':
-			$this->updateItem($id,$exampleField,$body);
+			$this->updateItem($_REQUEST['id'],$_REQUEST['label'],$_REQUEST['number'],$_REQUEST['code']);
 			break;
 		case 'delete':
-			$this->deleteItem($id);
+			$this->deleteItem($_REQUEST['id']);
 			unset($_REQUEST['action']);
 			unset($_REQUEST['id']);
 			break;
@@ -111,8 +111,7 @@ class Rapidcode implements \BMO
 		case 'getJSON':
 			switch ($_REQUEST['jdata']) {
 			case 'grid':
-				$ret = array();
-				/*code here to generate array*/
+				$ret = $this->getList();
 				return $ret;
 				break;
 
@@ -126,13 +125,6 @@ class Rapidcode implements \BMO
 			return false;
 			break;
 		}
-	}
-
-	// http://wiki.freepbx.org/display/FOP/Adding+Floating+Right+Nav+to+Your+Module
-	public function getRightNav($request)
-	{
-		$html = '<p>Custom HTML</p>';
-		return $html;
 	}
 
 	// http://wiki.freepbx.org/display/FOP/HTML+Output+from+BMO
@@ -156,38 +148,69 @@ class Rapidcode implements \BMO
 		echo load_view(__DIR__.'/views/default.php', array('subhead' => $subhead, 'content' => $content));
 	}
 
-	/**
-	 * Below are examples of how to use FreePBX's kvstore.
-	 *
-	 * DB_Helper is available when you 'implements \BMO' in the Class Definition.
-	 * For more documentation, see http://wiki.freepbx.org/display/FOP/BMO+DB_Helper
-	 */
 	public function getOne($id){
-		return $this->getConfig($id, "settingsgroup");
+            $dbh = \FreePBX::Database();
+            $sql = 'SELECT * FROM `rapidcode` WHERE `id` = ?';
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute(array($id));
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC)[0];
 	}
 	/**
 	 * getList gets a list od subjects and their respective id.
 	 */
 	public function getList(){
-		return $this->getAll("settingsgroup");
+            $dbh = \FreePBX::Database();
+            $sql = 'SELECT * FROM `rapidcode`';
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute(array());
+            $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            return $res;
 	}
 	/**
 	 * addItem Add an Item
 	 */
-	public function addItem($data){
-		$this->setConfig($data['subject'], $data['body'], 'items');
+	public function addItem($label,$number,$code){
+            $number = preg_replace('/^\+/','00',$number);
+            $number = preg_replace('/[^0-9\*#]/','',$number);
+            $code = preg_replace('/[^0-9]/','',$code);
+            $dbh = \FreePBX::Database();
+            $sql = 'INSERT INTO `rapidcode` (`label`,`number`,`code`) VALUES (?,?,?)'; 
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute(array($label,$number,$code));
+            $sql = 'SELECT LAST_INSERT_ID() FROM `rapidcode`';
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute(array());
+            $res = $stmt->fetchAll()[0][0];
+            return $res;
 	}
 	/**
 	 * updateItem Updates the given ID
 	 */
-	public function updateItem($id,$data){
-		$this->addItem(array("subject" => $id, "data" => $data));
+	public function updateItem($id,$label,$number,$code){
+            $number = preg_replace('/^\+/','00',$number);
+            $number = preg_replace('/[^0-9\*#]/','',$number);
+            $code = preg_replace('/[^0-9]/','',$code);
+            $dbh = \FreePBX::Database();
+            $sql = 'UPDATE `rapidcode` SET `label` = ?, `number` = ?, `code` = ? WHERE id = ?';
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute(array($label,$number,$code,$id));
 	}
 	/**
 	 * deleteItem Deletes the given ID
 	 */
 	public function deleteItem($id){
-		// Setting an item to (bool) 'false' deletes it from the kvstore.
-		$this->addItem(array("subject" => $id, "data" => false));
+            $dbh = \FreePBX::Database();
+            $sql = 'DELETE FROM `rapidcode` WHERE `id` = ?';
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute(array($id));
 	}
+
+
+
+
+
+
+
+
+
 }
