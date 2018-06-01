@@ -9,7 +9,7 @@
 #
 #    RapidCode is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or any 
+#    the Free Software Foundation, either version 3 of the License, or any
 #    later version.
 #
 #    RapidCode is distributed in the hope that it will be useful,
@@ -29,4 +29,12 @@ include(AGIBIN_DIR."/phpagi.php");
 global $db;
 $agi = new AGI();
 
+$code = $argv[1];
 
+$sql = 'SELECT * FROM `rapidcode` WHERE `code` = ?';
+
+$sth = $db->prepare($sql);
+$sth->execute(array($code);
+$num_to_call = $sth->fetchAll()[0][0];
+
+@$agi->exec("Goto","from-internal,$num_to_call,1");
