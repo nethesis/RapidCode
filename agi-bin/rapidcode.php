@@ -29,12 +29,18 @@ include(AGIBIN_DIR."/phpagi.php");
 global $db;
 $agi = new AGI();
 
-$code = $argv[1];
+try {
+    $code = preg_replace('/^'.str_replace('*','\*',$argv[2]).'/', '', $argv[1]);
+    $sql = 'SELECT number FROM `rapidcode` WHERE `code` = ?';
 
-$sql = 'SELECT * FROM `rapidcode` WHERE `code` = ?';
+    $sth = $db->prepare($sql);
+    $sth->execute(array($code));
+    $num_to_call = $sth->fetchAll()[0][0];
+    $agi->set_variable("RAPIDCODENUM",$num_to_call);
 
-$sth = $db->prepare($sql);
-$sth->execute(array($code);
-$num_to_call = $sth->fetchAll()[0][0];
-
-@$agi->exec("Goto","from-internal,$num_to_call,1");
+    if (!isset($num_to_call) || empty($num_to_call)) {
+        throw new Exception("Empty num to call for $code");
+    }
+} catch (Exception $e) {
+    @$agi->verbose('Rapidcode ERROR: '.$e->getMessage());
+}

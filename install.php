@@ -41,6 +41,6 @@ if ($result === true) {
 // Register FeatureCode
 $fcc = new featurecode('rapidcode', 'rapidcode');
 $fcc->setDescription('Call Rapidcode');
-$fcc->setDefault('*0');
+$fcc->setDefault('*99');
 $fcc->update();
 unset($fcc);
