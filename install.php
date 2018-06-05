@@ -23,8 +23,8 @@ $dbh = \FreePBX::Database();
 try {
     $sql = "CREATE TABLE IF NOT EXISTS rapidcode(
     `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
-    `number` BIGINT(20) UNSIGNED NOT NULL,
-    `code` INT(10) NOT NULL,
+    `number` VARCHAR(20) NOT NULL,
+    `code` VARCHAR(10) NOT NULL,
     `label` VARCHAR(100) DEFAULT NULL);";
     $sth = $dbh->prepare($sql);
     $result = $sth->execute();
