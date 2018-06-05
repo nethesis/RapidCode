@@ -130,6 +130,25 @@ class Rapidcode implements \BMO
 			switch ($_REQUEST['jdata']) {
 			case 'grid':
 				$ret = $this->getList();
+                                $code = '*0'; // *0 is the default feature code for RapidCode
+
+                                if (is_array($featurelist = featurecodes_getAllFeaturesDetailed())){
+                                    foreach ($featurelist as $f) {
+                                        if ($f['featurename'] !== 'rapidcode') {
+                                             continue;
+                                        }
+                                        if (!empty($f['customcode'])) {
+                                            $code = $f['customcode'];
+                                        } elseif (!empty(['defaultcode'])) {
+                                            $code = $f['defaultcode'];
+                                        }
+                                        break;
+                                    }
+                                }
+                                foreach ($ret as $index => $r) {
+                                    $r['code'] = $code . ' ' . $r['code'];
+                                    $ret[$index] = $r;
+                                }
 				return $ret;
 				break;
 

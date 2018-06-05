@@ -24,31 +24,37 @@ function rapidcode_get_config($engine) {
     global $ext;
     switch($engine) {
         case "asterisk":
-            if (is_array($featurelist = featurecodes_getModuleFeatures($modulename))) {
+            $code = '*0'; // *0 is the default feature code for RapidCode
+
+            if (is_array($featurelist = featurecodes_getAllFeaturesDetailed())){
                 foreach ($featurelist as $f) {
                     if ($f['featurename'] !== 'rapidcode') {
                         continue;
                     }
-                    if (empty($f['code'])) {
-                        $f['code'] = '*0'; // *0 is the default feature code fo RapidCode
+                    if (!empty($f['customcode'])) {
+                        $code = $f['customcode'];
+                    } elseif (!empty(['defaultcode'])) {
+                        $code = $f['defaultcode'];
                     }
-                    $c = '_'.$f['code'].'.';
-                    $context = 'app-rapidcode';
-                    // add app-rapidcode to from-internal-additional context
-                    $ext->addInclude('from-internal-additional', $context);
-                    // create RAPIDCODENUM empty variable
-                    $ext->add($context, $c, '', new ext_setvar('RAPIDCODENUM',''));
-                    // execute AGI
-                    $ext->add($context, $c, '', new ext_agi('rapidcode.php,${EXTEN},'.$f['code']));
-                    // if RAPIDCODENUM is still empty goto fail
-                    $ext->add($context, $c, '', new ext_gotoif('$[ "foo${RAPIDCODENUM}" = "foo" ]', 'fail'));
-                    // call RAPIDCODENUM
-                    $ext->add($context, $c, '', new ext_goto('outbound-allroutes,${RAPIDCODENUM},1'));
-                    // fail
-                    $ext->add($context, $c, 'fail', new ext_playback('pbx-invalid'));
-                    $ext->add($context, $c, '', new ext_hangup());
+                    break;
                 }
             }
+
+            $c = '_'.$code.'.';
+            $context = 'app-rapidcode';
+            // add app-rapidcode to from-internal-additional context
+            $ext->addInclude('from-internal-additional', $context);
+            // create RAPIDCODENUM empty variable
+            $ext->add($context, $c, '', new ext_setvar('RAPIDCODENUM',''));
+            // execute AGI
+            $ext->add($context, $c, '', new ext_agi('rapidcode.php,${EXTEN},'.$code));
+            // if RAPIDCODENUM is still empty goto fail
+            $ext->add($context, $c, '', new ext_gotoif('$[ "foo${RAPIDCODENUM}" = "foo" ]', 'fail'));
+            // call RAPIDCODENUM
+            $ext->add($context, $c, '', new ext_goto('outbound-allroutes,${RAPIDCODENUM},1'));
+            // fail
+            $ext->add($context, $c, 'fail', new ext_playback('pbx-invalid'));
+            $ext->add($context, $c, '', new ext_hangup());
         break;
     }
 }
