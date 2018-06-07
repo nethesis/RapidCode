@@ -33,7 +33,7 @@ function rapidcode_get_config($engine) {
                     }
                     if (!empty($f['customcode'])) {
                         $code = $f['customcode'];
-                    } elseif (!empty(['defaultcode'])) {
+                    } elseif (!empty($f['defaultcode'])) {
                         $code = $f['defaultcode'];
                     }
                     break;
