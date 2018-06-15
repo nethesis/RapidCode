@@ -14,20 +14,41 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-msgid "Rapid Code"
-msgstr "Codice Rapido di Chiamata"
-
-msgid "Label"
-msgstr "Etichetta"
-
-msgid "Phone Number"
-msgstr "Numero di telefono"
-
-msgid "Action"
+msgid "Actions"
 msgstr "Azioni"
 
 msgid "Add Rapid Code"
 msgstr "Aggiungi codice rapido di chiamata"
+
+msgid "Browse"
+msgstr "Sfoglia"
+
+msgid "Creating the database table"
+msgstr "Creazione della tabella del database"
+
+msgid "Delete"
+msgstr "Elimina"
+
+msgid "Edit Rapid Code"
+msgstr "Modifica codice rapido"
+
+msgid "Export to CSV"
+msgstr "Esporta in CSV"
+
+msgid "Failed to add code on line:"
+msgstr "Errore nell'aggiunta del codice alla riga:"
+
+msgid "Filename:"
+msgstr "Nome file:"
+
+msgid "Import from CSV"
+msgstr "Importa da CSV"
+
+msgid "Import Rapidcodes from CSV"
+msgstr "Importa Codici Rapidi da CSV"
+
+msgid "Label"
+msgstr "Etichetta"
 
 msgid "List Rapid Code"
 msgstr "Lista codici rapidi di chiamata"
@@ -35,8 +56,14 @@ msgstr "Lista codici rapidi di chiamata"
 msgid "Label for the rapid code"
 msgstr "Etichetta da usare per questo codice rapido di chiamata"
 
+msgid "Phone Number"
+msgstr "Numero di telefono"
+
 msgid "Phone number to call with this rapid code"
 msgstr "Numero da chiamare con questo codice rapido di chiamata"
+
+msgid "Rapid Code"
+msgstr "Codice Rapido di Chiamata"
 
 msgid "Rapid code to call this number"
 msgstr "Codice per chiamare questo numero"
@@ -44,3 +71,20 @@ msgstr "Codice per chiamare questo numero"
 msgid "Rapid Code List"
 msgstr "Lista codici rapidi di chiamata"
 
+msgid "Reset"
+msgstr "Annulla"
+
+msgid "Something went wrong"
+msgstr "Qualcosa è andato storto"
+
+msgid "Submit"
+msgstr "Salva"
+
+msgid "Table Created"
+msgstr "Tabella creata"
+
+msgid "Upload a CSV file"
+msgstr "Carica un file CSV"
+
+msgid "Wrong elements number on line:"
+msgstr "Numero di elementi sbagliato alla riga:"

@@ -196,7 +196,7 @@ class Rapidcode implements \BMO
 			}
 			break;
                 case 'csvimport':
-                    $subhead = _('Import Rapidcode from CSV');
+                    $subhead = _('Import Rapidcodes from CSV');
                     $content = load_view(__DIR__.'/views/csvimport.php');
                     break;
                 case 'csvexport':

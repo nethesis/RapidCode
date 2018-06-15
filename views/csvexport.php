@@ -26,5 +26,5 @@ foreach (\FreePBX::Rapidcode()->getList() as $row) {
 }
 fseek($f, 0);
 header('Content-Type: application/csv');
-header('Content-Disposition: attachment; filename="repidcode.csv";');
+header('Content-Disposition: attachment; filename="rapidcode.csv";');
 fpassthru($f);
