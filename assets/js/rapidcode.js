@@ -4,3 +4,13 @@ function linkFormatter(value,row) {
   html += '<a class="delAction" href="?display=rapidcode&action=delete&id=' + row.id + '"><i class="fa fa-trash"></i></a>';
   return html;
 }
+
+$("document").ready(function(){
+
+    $("#fileupload").change(function() {
+        $("#filenamelabel").show();
+        var text = $("#fileupload").val().replace('C:\\fakepath\\','');
+        $("#filename").text(text);
+    });
+});
+

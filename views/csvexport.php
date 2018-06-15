@@ -1,4 +1,4 @@
-<!--
+<?php
 #
 #    Copyright (C) 2018 Nethesis S.r.l.
 #    http://www.nethesis.it - support@nethesis.it
@@ -18,9 +18,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with RapidCode module.  If not, see <http://www.gnu.org/licenses/>.
 #
--->
-<a href="?display=rapidcode" class="list-group-item"><i class="fa fa-list"></i>&nbsp;<?php echo _("List Rapid Code")?></a>
-<a href="?display=rapidcode&view=form" class="list-group-item"><i class="fa fa-plus"></i>&nbsp;<?php echo _("Add Rapid Code")?></a>
-<a href="?display=rapidcode&view=csvimport" class="list-group-item"><i class="fa fa-file-excel-o"></i>&nbsp;<?php echo _("Import from CSV")?></a>
-<a href="?display=rapidcode&view=csvexport" class="list-group-item"><i class="fa fa-floppy-o"></i>&nbsp;<?php echo _("Export to CSV")?></a>
 
+$f = fopen('php://memory', 'w');
+foreach (\FreePBX::Rapidcode()->getList() as $row) {
+    $out = array($row['label'],$row['number'],$row['code']);
+    fputcsv($f, $out);
+}
+fseek($f, 0);
+header('Content-Type: application/csv');
+header('Content-Disposition: attachment; filename="repidcode.csv";');
+fpassthru($f);

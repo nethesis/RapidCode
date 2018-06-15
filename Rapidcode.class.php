@@ -75,6 +75,24 @@ class Rapidcode implements \BMO
 			unset($_REQUEST['action']);
 			unset($_REQUEST['id']);
 			break;
+                case 'importcsv':
+                        if (isset($_FILES) && isset($_FILES['csvfile']) && isset($_FILES['csvfile']['tmp_name'])) {
+                            $errors = array();
+                            if (($handle = fopen($_FILES['csvfile']['tmp_name'], "r")) !== FALSE) {
+                                 while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                                     if (count($data) !== 3) {
+                                         $errors[] = _('Wrong elements number on line:').' "'.implode(',',$data).'"';
+                                         continue;
+                                     }
+                                     $res = $this->addItem($data[0],$data[1],$data[2]);
+                                     if ($res === FALSE) {
+                                         $errors[] = _('Failed to add code on line:').' "'.implode(',',$data).'"';
+                                     }
+                                 }
+                                 fclose($handle);
+                             }
+                        }
+                        break;
 		}
 	}
 
@@ -177,6 +195,15 @@ class Rapidcode implements \BMO
 				$content = load_view(__DIR__.'/views/form.php');
 			}
 			break;
+                case 'csvimport':
+                    $subhead = _('Import Rapidcode from CSV');
+                    $content = load_view(__DIR__.'/views/csvimport.php');
+                    break;
+                case 'csvexport':
+                    $out = load_view(__DIR__.'/views/csvexport.php');
+                    echo $out;
+                    exit ();
+                    break;
 		default:
 			$subhead = _('Rapid Code List');
 			$content = load_view(__DIR__.'/views/grid.php');
@@ -207,18 +234,30 @@ class Rapidcode implements \BMO
 	 * addItem Add an Item
 	 */
 	public function addItem($label,$number,$code){
-            $number = preg_replace('/^\+/','00',$number);
-            $number = preg_replace('/[^0-9\*#]/','',$number);
-            $code = preg_replace('/[^0-9]/','',$code);
-            $dbh = \FreePBX::Database();
-            $sql = 'INSERT INTO `rapidcode` (`label`,`number`,`code`) VALUES (?,?,?)';
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute(array($label,$number,$code));
-            $sql = 'SELECT LAST_INSERT_ID() FROM `rapidcode`';
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute(array());
-            $res = $stmt->fetchAll()[0][0];
-            return $res;
+            try {
+                $number = preg_replace('/^\+/','00',$number);
+                $number = preg_replace('/[^0-9\*#]/','',$number);
+                $code = preg_replace('/[^0-9]/','',$code);
+                $dbh = \FreePBX::Database();
+                // check if code already exists
+                $sql = 'SELECT `id` FROM `rapidcode` WHERE `code` = ?';
+                $stmt = $dbh->prepare($sql);
+                $stmt->execute(array($code));
+                $id = $stmt->fetchAll()[0][0];
+                if (isset($id)) {
+                    $this->deleteItem($id);
+                }
+                $sql = 'INSERT INTO `rapidcode` (`label`,`number`,`code`) VALUES (?,?,?)';
+                $stmt = $dbh->prepare($sql);
+                $stmt->execute(array($label,$number,$code));
+                $sql = 'SELECT LAST_INSERT_ID() FROM `rapidcode`';
+                $stmt = $dbh->prepare($sql);
+                $stmt->execute(array());
+                $res = $stmt->fetchAll()[0][0];
+                return $res;
+            } catch (Exception $e) {
+                return FALSE;
+            }
 	}
 	/**
 	 * updateItem Updates the given ID
