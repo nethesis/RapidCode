@@ -46,14 +46,6 @@ class Rapidcode implements \BMO
 	{
 	}
 
-	// The following two stubs are planned for implementation in FreePBX 15.
-	public function backup()
-	{
-	}
-	public function restore($backup)
-	{
-	}
-
 	// http://wiki.freepbx.org/display/FOP/BMO+Hooks#BMOHooks-HTTPHooks(ConfigPageInits)
 	//
 	// This handles any data passed to this module before the page is rendered.

@@ -2,7 +2,7 @@
   <rawname>rapidcode</rawname>
   <repo>unsupported</repo>
   <name>Rapid Code</name>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <category>Applications</category>
   <Publisher>Stefano Fancello</Publisher>
   <info></info>
@@ -12,9 +12,9 @@
     <rapidcode>Rapid Code</rapidcode>
 </menuitems>
 <depends>
-  <version>14</version>
+  <version>14.0.0</version>
 </depends>
-<supported>14.0</supported>
+<supported>14.0.0</supported>
 
 <description>Easy Speed Dial alternative</description>
 <changelog></changelog>
