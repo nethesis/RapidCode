@@ -51,7 +51,7 @@ function rapidcode_get_config($engine) {
             // if RAPIDCODENUM is still empty goto fail
             $ext->add($context, $c, '', new ext_gotoif('$[ "foo${RAPIDCODENUM}" = "foo" ]', 'fail'));
             // call RAPIDCODENUM
-            $ext->add($context, $c, '', new ext_goto('outbound-allroutes,${RAPIDCODENUM},1'));
+            $ext->add($context, $c, '', new ext_goto('${CONTEXT},${RAPIDCODENUM},1'));
             // fail
             $ext->add($context, $c, 'fail', new ext_playback('pbx-invalid'));
             $ext->add($context, $c, '', new ext_hangup());
