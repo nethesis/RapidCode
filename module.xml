@@ -2,12 +2,12 @@
   <rawname>rapidcode</rawname>
   <repo>unsupported</repo>
   <name>Rapid Code</name>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <category>Applications</category>
   <Publisher>Stefano Fancello</Publisher>
   <info></info>
-  <licence>GPL</licence>
-  <licenselink>http://www.gnu.org/licenses/gpl-2.0.txt</licenselink>
+  <license>GPLv3+</license>
+  <licenselink>http://www.gnu.org/licenses/gpl-3.0.txt</licenselink>
   <menuitems>
     <rapidcode>Rapid Code</rapidcode>
 </menuitems>
