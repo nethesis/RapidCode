@@ -1,3 +1,7 @@
+# OBSOLETE!
+
+The module is now here https://github.com/nethesis/ns8-nethvoice
+
 # rapidcode
 
 Easy Speed Dial alternative
